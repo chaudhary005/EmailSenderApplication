@@ -17,25 +17,35 @@ $value = isset($_SERVER['REQUEST_METHOD']);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include __DIR__. 'partials/_dbconnect.php';
     
-    empty($_POST['username']);
-    $username= mysqli_real_escape_string($conn, $_POST['username']);
-    $username= str_replace("<", "", $username);
-    $username= str_replace(">", "", $username);
-    $username= str_replace(";", "", $username);
+    if (isset($_POST['username'])) {
+        $username= mysqli_real_escape_string($conn, $_POST['username']);
+        $username= str_replace("<", "", $username);
+        $username= str_replace(">", "", $username);
+        $username= str_replace(";", "", $username);
+    }
 
-    $useremail=mysqli_real_escape_string($conn, $_POST['email']);
-    $useremail= str_replace("<", "", $useremail);
-    $useremail= str_replace(">", "", $useremail);
-    $useremail= str_replace(";", "", $useremail);
+    if (isset($_POST['email'])) {
+        $useremail=mysqli_real_escape_string($conn, $_POST['email']);
+        $useremail= str_replace("<", "", $useremail);
+        $useremail= str_replace(">", "", $useremail);
+        $useremail= str_replace(";", "", $useremail);
+    }
 
-    $password=mysqli_real_escape_string($conn, $_POST['password']);
-    $password= str_replace("<", "&lt;", $password);
-    $password= str_replace(">", "&gt;", $password);
+    if (isset($_POST['password'])) {
+        $password=mysqli_real_escape_string($conn, $_POST['password']);
+        $password= str_replace("<", "&lt;", $password);
+        $password= str_replace(">", "&gt;", $password);
+    }
 
-    $cpassword=mysqli_real_escape_string($conn, $_POST['cpassword']);
-    $cpassword=str_replace("<", "&lt;", $cpassword);
-    $cpassword=str_replace(">", "&gt;", $cpassword);
-    $sub=$_POST['sub'];
+    if (isset($_POST['cpassword'])) {
+        $cpassword=mysqli_real_escape_string($conn, $_POST['cpassword']);
+        $cpassword=str_replace("<", "&lt;", $cpassword);
+        $cpassword=str_replace(">", "&gt;", $cpassword);
+    }
+
+    if (isset($_POST['sub'])) {
+        $sub=$_POST['sub'];
+    }
     $token=bin2hex(random_bytes(15));
 
     //check no entry should be blank
@@ -88,14 +98,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <?php require __DIR__. '/partials/_header.php'; ?>
     
-    <hr><?php 
+    <hr>
+    <?php 
     if ($showSuccess) {
         echo "<strong>Great! ".$showSuccess."</strong><br>";
     }
     if ($showError) {
         echo "<strong>Error! ".$showError."</strong><br>";
     }
-    ?><hr>
+    ?>
+    <hr>
     <h2>SignUp for to create new account</h2>
     <form action="signup.php" method="POST">
         <div>

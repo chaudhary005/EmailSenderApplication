@@ -19,14 +19,15 @@ require __DIR__. '/partials/_dbconnect.php';
 $id = $_SESSION['id'];
 $value = isset($_SERVER['REQUEST_METHOD']);
 if ($_SERVER['REQUEST_METHOD']=="POST") {
-
-    $check = $_POST['choice'];
-    if ($check == "n") {
-        $sql = "UPDATE `users` SET `sub` = 'n' WHERE `sno` = '$id'";
-        $result = mysqli_query($conn, $sql);
-        header('location: afterUnsub.php');
-    } else {
-        header('location: index.php');
+    if (isset($_POST['choice'])) {
+        $check = $_POST['choice'];
+        if ($check == "n") {
+            $sql = "UPDATE `users` SET `sub` = 'n' WHERE `sno` = '$id'";
+            $result = mysqli_query($conn, $sql);
+            header('location: afterUnsub.php');
+        } else {
+            header('location: index.php');
+        }
     }
 }
 

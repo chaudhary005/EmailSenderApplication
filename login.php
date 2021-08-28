@@ -19,9 +19,11 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 
     if (!empty($_POST['email'])) {
         $useremail=mysqli_real_escape_string($conn, $_POST['email']);
-        $password=mysqli_real_escape_string($conn, $_POST['password']);
-        $password= str_replace("<", "&lt;", $password);
-        $password= str_replace(">", "&gt;", $password);
+        if (isset($_POST['password'])) {
+            $password=mysqli_real_escape_string($conn, $_POST['password']);
+            $password= str_replace("<", "&lt;", $password);
+            $password= str_replace(">", "&gt;", $password);
+        }
         
         $sql="SELECT * FROM `users` WHERE `email` = '$useremail'";
         $result = mysqli_query($conn, $sql);
@@ -65,13 +67,14 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     <title>Login</title>
 </head>
 <body>
-    <?php require __DIR__. '/partials/_header.php' ?>
+    <?php require __DIR__. '/partials/_header.php'; ?>
     <hr>
     <?php
     if ($showError) {
         echo "<strong>Error! ".$showError."</strong>";
     }
-    ?><hr>
+    ?>
+    <hr>
     <h2>Login to your account.</h2>
     <form action="login.php" method="POST">
         <div>

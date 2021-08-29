@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 
 <body>
     <div id="header">
-        <?php require __DIR__. '/partials/_header.php' ?>
+        <?php require __DIR__. '/partials/_header.php'; ?>
         <hr>
         <div id="msg">
             <?php

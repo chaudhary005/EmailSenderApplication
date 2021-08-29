@@ -92,14 +92,15 @@ $sub=$row['sub'];
             healthy.</b><br><br>
 
 
-        <?php if ($sub=='y') {
-            echo 'To UNSUBSCRIBE to email updates &nbsp;
-            <a href="_unsub.php?uid='.$id.'">click here</a>';
-        } else {
-            echo 'To SUBSCRIBE to email updates &nbsp; 
-            <a href="_sub.php?uid='.$id.'">click here</a>';
-        }
-        ?>
+<?php 
+if ($sub=='y') {
+    echo 'To UNSUBSCRIBE to email updates &nbsp;
+    <a href="_unsub.php?uid='.$id.'">click here</a>';
+} else {
+    echo 'To SUBSCRIBE to email updates &nbsp; 
+    <a href="_sub.php?uid='.$id.'">click here</a>';
+}
+?>
     </div>
 </body>
 

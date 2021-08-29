@@ -35,29 +35,59 @@ if ($_SERVER['REQUEST_METHOD']=="POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscribe</title>
+    <style>
+    hr {
+        margin: 2px;
+    }
+    body{
+        background-color: lightslategray;
+    }
+
+    #header {
+        position: relative;
+        display: block;
+        font-size: larger;
+        top: 5vh;
+        padding: 0 2vw;
+    }
+
+    #container {
+        position: relative;
+        display: block;
+        top: 8vh;
+        padding: 0 0 0 3vw;
+        font-size: 20px;
+    }
+    </style>
 </head>
+
 <body>
-    
-    <?php require __DIR__. '/partials/_header.php'; ?>
-    <hr>
-    <hr>
-    <?php
-    echo '
-    <form action="_sub.php?uid='.$id.'" method="POST">
-        <div>Do you want to SUBSCRIBE to our comic emails?<br>
-            <input type="radio" name="choice" id="yes" value="y">
-            <label for="yes">Yes</label>
-            <input type="radio" name="choice" id="no" value="n">
-            <label for="no">No</label>
-        </div><br>
-        <input type="submit" value="Submit">
-    </form>
-    ';
-    ?>
+    <div id="header">
+        <?php require __DIR__. '/partials/_header.php'; ?>
+        <hr>
+        <hr>
+    </div>
+    <div id="container">
+        <?php
+        echo '
+        <form action="_sub.php?uid='.$id.'" method="POST">
+            <div>Do you want to SUBSCRIBE to our comic emails?<br>
+                <br><input type="radio" name="choice" id="yes" value="y">
+                <label for="yes">Yes</label>
+                <input type="radio" name="choice" id="no" value="n">
+                <label for="no">No</label>
+            </div><br>
+            <input type="submit" value="Submit">
+        </form>
+        ';
+        ?>
+    </div>
 </body>
+
 </html>

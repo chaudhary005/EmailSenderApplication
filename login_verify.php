@@ -19,11 +19,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 
     if (!empty($_POST['email'])) {
         $useremail=mysqli_real_escape_string($conn, $_POST['email']);
-        if (isset($_POST['password'])) {
-            $password=mysqli_real_escape_string($conn, $_POST['password']);
-            $password= str_replace("<", "&lt;", $password);
-            $password= str_replace(">", "&gt;", $password);
-        }
+        $password=mysqli_real_escape_string($conn, $_POST['password']);
+        $password= str_replace("<", "&lt;", $password);
+        $password= str_replace(">", "&gt;", $password);
         
         $sql="SELECT * FROM `users` WHERE `email` = '$useremail'";
         $result = mysqli_query($conn, $sql);
@@ -60,35 +58,77 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-</head>
-<body>
-    <?php require __DIR__. '/partials/_header.php'; ?>
-    <hr>
-    <?php
-    if ($showError) {
-        echo "<strong>Error! ".$showError."</strong>";
+    <style>
+    hr {
+        margin: 2px;
     }
-    echo "<b> Check your mail to activate your account.</b>";
-    ?>
-    <hr>
-    <h2>Login to your account.</h2>
-    <form action="login_verify.php" method="POST">
-        <div>
-            <label for="email">Email</label><br>
-            <input type="email" name="email" id="email" style="width: 25vw;">
-        </div><br>
-        <div>
-            <label for="password">Password</label><br>
-            <input type="password" name="password" 
-            id="password" style="width: 25vw;">
-        </div><br>
-        <input type="submit" value="Login">
-    </form>
+    body{
+        background-color: lightslategray;
+    }
+
+    #header {
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+        font-size: larger;
+        top: 5vh;
+    }
+
+    #container {
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 50px;
+        width: 26%;
+        top: 15vh;
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: lightgray
+    }
+    #msg{
+        padding: 0 0 0 24vw;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <?php require __DIR__. '/partials/_header.php'; ?>
+        <hr>
+        <div id="msg">
+            <?php
+            if ($showError) {
+                echo "<strong>Error! ".$showError."</strong>";
+            }
+            echo "<b> Check your mail to activate your account.</b>";
+            ?>
+        </div>
+        <hr>
+    </div>
+    <div id="container">
+        <h2>Login to your account.</h2>
+        <form action=<?php echo htmlspecialchars("login_verify.php"); ?> method="POST">
+            <div>
+                <label for="email">Email</label><br>
+                <input type="email" name="email" id="email" style="width: 25vw;">
+            </div><br>
+            <div>
+                <label for="password">Password</label><br>
+                <input type="password" name="password" id="password" style="width: 25vw;">
+            </div><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
 
 </body>
+
 </html>

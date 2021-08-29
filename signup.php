@@ -1,6 +1,6 @@
 <?php
 /**
- * MyClass File Doc Comment
+ * My File Doc Comment
  * 
  * PHP version 8.0.6
  * 
@@ -15,38 +15,43 @@ $showError=false;
 $showSuccess=false;
 $value = isset($_SERVER['REQUEST_METHOD']);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include __DIR__. 'partials/_dbconnect.php';
+    include __DIR__. '/partials/_dbconnect.php';
     
     if (isset($_POST['username'])) {
-        $username= mysqli_real_escape_string($conn, $_POST['username']);
-        $username= str_replace("<", "", $username);
-        $username= str_replace(">", "", $username);
-        $username= str_replace(";", "", $username);
+        $username = Test_input($_POST['username']);
     }
 
     if (isset($_POST['email'])) {
-        $useremail=mysqli_real_escape_string($conn, $_POST['email']);
-        $useremail= str_replace("<", "", $useremail);
-        $useremail= str_replace(">", "", $useremail);
-        $useremail= str_replace(";", "", $useremail);
+        $useremail = Test_input($_POST['email']);
     }
 
     if (isset($_POST['password'])) {
-        $password=mysqli_real_escape_string($conn, $_POST['password']);
-        $password= str_replace("<", "&lt;", $password);
-        $password= str_replace(">", "&gt;", $password);
+        $password = Test_input($_POST['password']);
     }
 
     if (isset($_POST['cpassword'])) {
-        $cpassword=mysqli_real_escape_string($conn, $_POST['cpassword']);
-        $cpassword=str_replace("<", "&lt;", $cpassword);
-        $cpassword=str_replace(">", "&gt;", $cpassword);
+        $cpassword = Test_input($_POST['cpassword']);
     }
 
     if (isset($_POST['sub'])) {
-        $sub=$_POST['sub'];
+        $sub = Test_input($_POST['sub']);
     }
     $token=bin2hex(random_bytes(15));
+    
+    /**
+     * {@inheritdoc}
+     * 
+     * @param $data The value to be passes
+     * 
+     * @return string
+     */
+    function Test_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
 
     //check no entry should be blank
     if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password'])) {
@@ -89,48 +94,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignUp</title>
+    <style>
+    hr {
+        margin: 1px;
+    }
+    body{
+        background-color: lightslategray;
+    }
+
+    #header {
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+        font-size: larger;
+        top: 5vh;
+    }
+
+    #container {
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 50px;
+        width: 26%;
+        top: 15vh;
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: lightgray
+    }
+    </style>
 </head>
+
 <body>
-    <?php require __DIR__. '/partials/_header.php'; ?>
-    
-    <hr>
-    <?php 
-    if ($showSuccess) {
-        echo "<strong>Great! ".$showSuccess."</strong><br>";
-    }
-    if ($showError) {
-        echo "<strong>Error! ".$showError."</strong><br>";
-    }
-    ?>
-    <hr>
-    <h2>SignUp for to create new account</h2>
-    <form action="signup.php" method="POST">
-        <div>
-            <label for="username">Username</label><br>
-            <input type="text" name="username" id="username" style="width: 25vw;">
-        </div><br>
-        <div>
-            <label for="email">Email</label><br>
-            <input type="email" name="email" id="email"style="width: 25vw;"><br>
-            <small>We'll never share your email.</small>
-        </div><br>
-        <div>
-            <label for="password">Password</label><br>
-            <input type="password" name="password" id="password"style="width: 25vw;">
-        </div><br>
-        <div>
-            <label for="cpassword">Password</label><br>
-            <input type="password" name="cpassword" 
-            id="cpassword"style="width: 25vw;">
-            <input type="hidden" name="sub" value="y">
-        </div><br>
-        <input type="submit" name="submit" value="SignUp">
-    </form>
+    <div id="header">
+        <?php require __DIR__. '/partials/_header.php'; ?>
+
+        <hr>
+        <?php 
+        if ($showSuccess) {
+            echo "<strong>Great! ".$showSuccess."</strong><br>";
+        }
+        if ($showError) {
+            echo "<strong>Error! ".$showError."</strong><br>";
+        }
+        ?>
+        <hr>
+    </div>
+    <div id="container">
+        <h2>SignUp for to create new account</h2>
+        <form action=<?php echo htmlspecialchars("signup.php"); ?> method="POST">
+            <div>
+                <label for="username">Username</label><br>
+                <input type="text" name="username" id="username" style="width: 25vw;">
+            </div><br>
+            <div>
+                <label for="email">Email</label><br>
+                <input type="email" name="email" id="email" style="width: 25vw;"><br>
+                <small>We'll never share your email.</small>
+            </div><br>
+            <div>
+                <label for="password">Password</label><br>
+                <input type="password" name="password" id="password" style="width: 25vw;">
+            </div><br>
+            <div>
+                <label for="cpassword">Password</label><br>
+                <input type="password" name="cpassword" id="cpassword" style="width: 25vw;">
+                <input type="hidden" name="sub" value="y">
+            </div><br>
+            <input type="submit" name="submit" value="SignUp">
+        </form>
+    </div>
 
 </body>
+
 </html>

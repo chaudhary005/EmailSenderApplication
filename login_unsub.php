@@ -11,8 +11,9 @@
  * @link     http://localhost/
  */
 
-$login = false;
+$login=false;
 $showError=false;
+
 /**
  * {@inheritdoc}
  * 
@@ -33,7 +34,7 @@ $value = isset($_SERVER['REQUEST_METHOD']);
 if ($_SERVER['REQUEST_METHOD']=='POST') {
     include __DIR__. '/partials/_dbconnect.php';
 
-    if (!empty($_POST['email'])) {
+    if (isset($_POST['email'])) {
         $useremail = Test_input($_POST['email']);
         if (isset($_POST['password'])) {
             $password = Test_input($_POST['password']);
@@ -52,10 +53,10 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                         $_SESSION['username']=$row['username'];
                         $_SESSION['id']=$row['sno'];
                         $_SESSION['sub']=$row['sub'];
-                        header('location: index.php?uid='.$_SESSION['id']);
+                        header("location: _unsub.php?uid=".$_SESSION['id']);
                     } else {
-                            $showError="Please verify your email to activate 
-                            your account.";
+                        $showError="Please verify your email to activate 
+                        your account.";
                     }
                 } else {
                     $showError="Invalid Credentials";
@@ -108,10 +109,11 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
         top: 15vh;
         border: 2px solid black;
         border-radius: 10px;
-        background-color: lightgray
+        background-color: lightgray;
     }
-    #msg{
-        padding: 0 20vw;
+
+    #msg {
+        padding: 0 0 0 23vw;
     }
     a:visited{
         color: black;
@@ -124,33 +126,33 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
 
 <body>
     <div id="header">
-        <?php require __DIR__. '/partials/_header.php'; ?>
+        <?php require __DIR__. '/partials/_header.php' ?>
         <hr>
         <div id="msg">
             <?php
             if ($showError) {
                 echo "<strong>Error! ".$showError."</strong>";
             }
-            echo "<b> Check your mail to activate your account.</b>";
             ?>
         </div>
         <hr>
     </div>
     <div id="container">
         <h2>Login to your account.</h2>
-        <form action=<?php echo htmlspecialchars("login_verify.php"); ?> method="POST">
-            <div>
-                <label for="email">Email</label><br>
-                <input type="email" name="email" id="email" style="width: 25vw;">
-            </div><br>
-            <div>
-                <label for="password">Password</label><br>
-                <input type="password" name="password" id="password" style="width: 25vw;">
-            </div><br>
-            <input type="submit" value="Login">
-        </form>
+        <div>
+            <form action=<?php echo htmlspecialchars("login_unsub.php"); ?> method="POST">
+                <div id="form">
+                    <label for="email">Email</label><br>
+                    <input type="email" name="email" id="email" style="width: 25vw;">
+                </div><br>
+                <div>
+                    <label for="password">Password</label><br>
+                    <input type="password" name="password" id="password" style="width: 25vw;">
+                </div><br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
     </div>
-
 </body>
 
 </html>

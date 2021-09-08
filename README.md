@@ -18,4 +18,4 @@ The signup and login functionality is used here to increase the safety of the us
 
 **LIVE DEMO**
 
-Here is the live demo link of the assignment : .
+Here is the live demo link of the assignment : [Click here for demo](https://codesfree.fun/index.php)

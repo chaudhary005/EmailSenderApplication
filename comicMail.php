@@ -28,6 +28,19 @@ if ($numUsers>0) {
     file_put_contents($image, file_get_contents($user_data));
 
     // code for mail begins here
+
+    if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) {
+    $protocol = 'https://';
+    }
+    else {
+    $protocol = 'http://';
+    }
+    if (isset($_SERVER['HTTP_HOST'])){
+        $server = $_SERVER['HTTP_HOST'];
+    }
+    $protocol .= $server;
+    $protocol .= '/_unsub.php';
+
     $fileName = 'images/Comic_Image.jpg';
     while ($row=mysqli_fetch_assoc($result)) {
         $subject = 'Comic Image';
@@ -77,7 +90,7 @@ if ($numUsers>0) {
         'Content-Transfer-Encoding: 7bit' . $eol.
                 '<html>
                     <body>
-                        <a href="http://localhost/rtCamp/_unsub.php">Unsubscribe</a>
+                        <a href='.$protocol.'>Unsubscribe</a>
                     </body>
                     </html>'.'\n\n';
 
@@ -93,3 +106,5 @@ if ($numUsers>0) {
         mail($mailto, $subject, $body, $headers);
     }
 }
+
+?>

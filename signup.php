@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     else {
                     $protocol = 'http://';
                     }
-                    $protocol .= $_SERVER['HTTP_HOST'];
+                    $protocol .= isset($_SERVER['HTTP_HOST']);
                     $protocol .= '/activate.php';
                         
                     $body="Hi , $username. \r\n";

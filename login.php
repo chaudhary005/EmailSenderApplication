@@ -1,43 +1,22 @@
 <?php
-/**
- * MyClass File Doc Comment
- * 
- * PHP version 8.0.6
- * 
- * @category MyClass
- * @package  MyPackage
- * @author   Author <author@domain.com>
- * @license  https://opensource.org/licenses/MIT MIT License
- * @link     http://localhost/
- */
 
 $login=false;
 $showError=false;
 
-/**
- * {@inheritdoc}
- * 
- * @param $data The value to be passes
- * 
- * @return string
- */
-function Test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
-
+require __DIR__. '/test_function.php';
 $value = isset($_SERVER['REQUEST_METHOD']);
 if ($_SERVER['REQUEST_METHOD']=='POST') {
     include __DIR__. '/partials/_dbconnect.php';
 
     if (isset($_POST['email'])) {
-        $useremail = Test_input($_POST['email']);
+        $email = Test_input($_POST['email']);
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === true){
+            $useremail = $email;
+        }
         if (isset($_POST['password'])) {
-            $password = Test_input($_POST['password']);
+            $pass = Test_input($_POST['password']);
+            $password = filter_var($pass, FILTER_SANITIZE_STRING);
         }
         
         $sql="SELECT * FROM `users` WHERE `email` = '$useremail'";
@@ -55,18 +34,18 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
                         $_SESSION['sub']=$row['sub'];
                         header('location: index.php?uid='.$_SESSION['id']);
                     } else {
-                        $showError="Please verify your email to activate 
-                        your account.";
+                        $showError='Please verify your email to activate 
+                        your account.';
                     }
                 } else {
-                    $showError="Invalid Credentials";
+                    $showError='Invalid Credentials';
                 }
             }
         } else {
-            $showError="Invalid Credentials";
+            $showError='Invalid Credentials';
         }
     } else {
-        $showError="Please enter the details";
+        $showError='Please enter the details';
     }
 }
 
@@ -115,6 +94,12 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     #msg {
         padding: 0 0 0 23vw;
     }
+    a:visited{
+        color: black;
+    }
+    a:link{
+        color: black;
+    }
     </style>
 </head>
 
@@ -125,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
         <div id="msg">
             <?php
             if ($showError) {
-                echo "<strong>Error! ".$showError."</strong>";
+                echo '<strong>Error! '.$showError.'</strong>';
             }
             ?>
         </div>
@@ -134,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     <div id="container">
         <h2>Login to your account.</h2>
         <div>
-            <form action=<?php echo htmlspecialchars("login.php"); ?> method="POST">
+            <form action="login.php" method="POST">
                 <div id="form">
                     <label for="email">Email</label><br>
                     <input type="email" name="email" id="email" style="width: 25vw;">

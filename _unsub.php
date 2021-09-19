@@ -1,32 +1,24 @@
 <?php
-/**
- * MyClass File Doc Comment
- * 
- * PHP version 8.0.6
- * 
- * @category MyClass
- * @package  MyPackage
- * @author   Author <author@domain.com>
- * @license  https://opensource.org/licenses/MIT MIT License
- * @link     http://localhost/
- */
 
 session_start();
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
-    header("location: login_unsub.php");
+    header('location: login_unsub.php');
+    exit();
 }
 require __DIR__. '/partials/_dbconnect.php';
 $id = $_SESSION['id'];
 $value = isset($_SERVER['REQUEST_METHOD']);
-if ($_SERVER['REQUEST_METHOD']=="POST") {
+if ($_SERVER['REQUEST_METHOD']=='POST') {
     if (isset($_POST['choice'])) {
         $check = $_POST['choice'];
-        if ($check == "n") {
+        if ($check == 'n') {
             $sql = "UPDATE `users` SET `sub` = 'n' WHERE `sno` = '$id'";
             $result = mysqli_query($conn, $sql);
             header('location: afterUnsub.php');
+            exit();
         } else {
             header('location: index.php');
+            exit();
         }
     }
 }
@@ -62,6 +54,12 @@ if ($_SERVER['REQUEST_METHOD']=="POST") {
         top: 8vh;
         padding: 0 0 0 3vw;
         font-size: 20px;
+    }
+    a:visited{
+        color: black;
+    }
+    a:link{
+        color: black;
     }
     </style>
 </head>

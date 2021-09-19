@@ -1,24 +1,13 @@
 <?php
-/**
- * MyClass File Doc Comment
- * 
- * PHP version 8.0.6
- * 
- * @category MyClass
- * @package  MyPackage
- * @author   Author <author@domain.com>
- * @license  https://opensource.org/licenses/MIT MIT License
- * @link     http://localhost/
- */
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "projectrt";
+$servername = 'example_server';
+$username = 'example_name';
+$password = 'example_password';
+$database = 'example_database_name';
 
 $conn = mysqli_connect($servername, $username, $password, $database);
 if (!$conn) {
-    die("Database connection error!!");
+    die('Database connection error!!');
 }
 
 

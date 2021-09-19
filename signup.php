@@ -1,68 +1,52 @@
 <?php
-/**
- * My File Doc Comment
- * 
- * PHP version 8.0.6
- * 
- * @category MyClass
- * @package  MyPackage
- * @author   Author <author@domain.com>
- * @license  https://opensource.org/licenses/MIT MIT License
- * @link     http://localhost/
- */
 
 $showError=false;
-$showSuccess=false;
+
+require __DIR__. '/test_function.php';
 $value = isset($_SERVER['REQUEST_METHOD']);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include __DIR__. '/partials/_dbconnect.php';
     
     if (isset($_POST['username'])) {
-        $username = Test_input($_POST['username']);
+        $name = Test_input($_POST['username']);
+        $username = filter_var($name, FILTER_SANITIZE_STRING);
     }
 
     if (isset($_POST['email'])) {
-        $useremail = Test_input($_POST['email']);
+        $email = Test_input($_POST['email']);
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === true){
+            $useremail = $email;
+        }
     }
 
     if (isset($_POST['password'])) {
-        $password = Test_input($_POST['password']);
+        $pass = Test_input($_POST['password']);
+        $password = filter_var($pass, FILTER_SANITIZE_STRING);
     }
 
     if (isset($_POST['cpassword'])) {
-        $cpassword = Test_input($_POST['cpassword']);
+        $cpass = Test_input($_POST['cpassword']);
+        $cpassword = filter_var($cpass, FILTER_SANITIZE_STRING);
     }
 
     if (isset($_POST['sub'])) {
         $sub = Test_input($_POST['sub']);
+        $sub = filter_var($sub, FILTER_SANITIZE_STRING);
     }
     $token=bin2hex(random_bytes(15));
     
-    /**
-     * {@inheritdoc}
-     * 
-     * @param $data The value to be passes
-     * 
-     * @return string
-     */
-    function Test_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
 
     //check no entry should be blank
     if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password'])) {
-        $showError="Please enter all the details";
+        $showError='Please enter all the details';
     } else {
         //if user exist
         $sqlexist="SELECT * FROM `users` WHERE `email`='$useremail'";
         $result2 = mysqli_query($conn, $sqlexist);
         $numRows=mysqli_num_rows($result2);
         if ($numRows>0) {
-            $showError="User already exists!";
+            $showError='User already exists!';
         } else {
             if ($password==$cpassword) {
                 $hash=password_hash($password, PASSWORD_DEFAULT);
@@ -72,17 +56,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 current_timestamp())";
                 $result = mysqli_query($conn, $sql);
                 if ($result) {
-                    $to_email=$useremail;
-                    $subject="Account Verification!";
-                    $headers="From: chaudharyshivmalan@gmail.com";
-                    $body="Hi , $username. Click here to activate your account 
-                    http://localhost/rtCamp/activate.php?token=$token";
+                    $to_email=$useremail;        
+                    $subject = 'Account Verification!';
+                    
+                    if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) {
+                    $protocol = 'https://';
+                    }
+                    else {
+                    $protocol = 'http://';
+                    }
+                    $protocol .= $_SERVER['HTTP_HOST'];
+                    $protocol .= '/activate.php';
+                        
+                    $body="Hi , $username. \r\n";
+                    $body .= "Click here to activate your account 
+                    $protocol?token=$token";
+                    
+                    $headers = 'MIME-Version: 1.0 \r\n';
+                    $headers .= 'Content-type:text/html;charset=UTF-8 \r\n';
+                    
                     if (mail($to_email, $subject, $body, $headers)) {
-                        header('location: login_verify.php');                     
+                        header('location: login_verify.php');
+                        exit();                   
                     }
                 }
             } else {
-                $showError="Passwords do not match!";
+                $showError='Passwords do not match!';
             }
         }
     }
@@ -130,27 +129,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         border-radius: 10px;
         background-color: lightgray
     }
+    #msg {
+        padding: 0 0 0 23vw;
+    }
+    a:visited{
+        color: black;
+    }
+    a:link{
+        color: black;
+    }
     </style>
 </head>
 
 <body>
-    <div id="header">
+   <div id="header">
         <?php require __DIR__. '/partials/_header.php'; ?>
-
         <hr>
-        <?php 
-        if ($showSuccess) {
-            echo "<strong>Great! ".$showSuccess."</strong><br>";
-        }
-        if ($showError) {
-            echo "<strong>Error! ".$showError."</strong><br>";
-        }
-        ?>
+        <div id="msg">
+            <?php 
+            if ($showError) {
+                echo '<strong>Error! '.$showError.'</strong><br>';
+            }
+            ?>
+        </div>
         <hr>
     </div>
     <div id="container">
         <h2>SignUp for to create new account</h2>
-        <form action=<?php echo htmlspecialchars("signup.php"); ?> method="POST">
+        <form action="signup.php" method="POST">
             <div>
                 <label for="username">Username</label><br>
                 <input type="text" name="username" id="username" style="width: 25vw;">

@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__. '/partials/_dbconnect.php';
+require __DIR__. '/../partials/_dbconnect.php';
 $sql = "SELECT * FROM `users` WHERE `sub` = 'y' AND `status` = 'active'";
 $result = mysqli_query($conn, $sql);
 $numUsers = mysqli_num_rows($result);
@@ -54,7 +54,7 @@ if ($numUsers>0) {
         $separator = md5(time());
 
         // carriage return type (RFC)
-        $eol = '\r\n';
+        $eol = "\r\n";
 
         // standard mail header
         $headers = 'MIME-Version: 1.0' . $eol;
@@ -76,7 +76,7 @@ if ($numUsers>0) {
                         <img src="cid:Comic_Image.jpg">
                         <br>
                     </body>                
-                </html>'.'\n\n';
+                </html>'."\r\n";
 
         // attachment
         $body .= '--' . $separator . $eol;
@@ -92,7 +92,7 @@ if ($numUsers>0) {
                     <body>
                         <a href='.$protocol.'>Unsubscribe</a>
                     </body>
-                    </html>'.'\n\n';
+                    </html>'."\r\n";
 
         // inline image
         $body .= '--' . $separator . $eol;

@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Password Protected File"
+AuthUserFile #(replace this with the path to your .htsecure file)
+require valid-user

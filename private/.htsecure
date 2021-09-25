@@ -1,0 +1,4 @@
+# generate username and password for .htaccess file, you can try the given link below:
+# https://hostingcanada.org/htpasswd-generator/
+# after generating the hashed username and password replace this whole content with that
+# and don't forget to change the path of your .htsecure file in .htaccess as mentioned
